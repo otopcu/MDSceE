@@ -1,0 +1,210 @@
+-- model type definition to conceptual -- scenario metamodel
+modeltype CS uses 'ConScen.ecore';
+-- model type definition to UML
+modeltype UML uses 'SimpleUML.ecore';
+-- transformation definitin from 
+-- Conceptual Scenario to UML
+transformation scenario2UML(in CS :        
+                 ConSce, out UML);
+-- main triggers the transformation
+main(in scenario: CS::ConSce, 
+     out umlModel: UML::Model) 
+{
+umlModel:= scenario.map scen2UML ();
+}
+
+mapping CS::CS::scenario2UMLModel() : UML::Model 
+{
+	init { log("ConSce2UML Mapping Started!"); }
+	packages   := self.entities2packagess();
+    interfaces := self.entChar2intClasses();
+    states     := self.states2staClasses();
+    ...
+	end { log("ConSce2UML Mapping Ended!"); }		
+}
+
+query UML::Package::package2schemas() : OrderedSet(RDB::Schema) 
+{
+	return self.map package2schema()->asSequence()->
+		union(self.getSubpackages()->collect(package2schemas()))->asOrderedSet()
+}
+
+mapping UML::Package::package2schema() : RDB::Schema 
+	when { self.hasPersistentClasses() }
+{
+	name     := self.name;
+	elements := self.ownedElements->select(oclIsKindOf(UML::Class))->
+		collect(oclAsType(UML::Class).map persistentClass2table())->asOrderedSet()
+}
+
+mapping UML::Class::persistentClass2table() : RDB::Table 
+	when { self.isPersistent() }
+{
+	name        := self.name;
+	columns     := self.class2columns(self)->sortedBy(name);
+	primaryKey  := self.map class2primaryKey();
+	foreignKeys := self.class2foreignKeys();
+}
+
+mapping UML::Class::class2primaryKey() : RDB::constraints::PrimaryKey 
+{
+	name := 'PK' + self.name;
+	includedColumns := self.resolveoneIn(UML::Class::persistentClass2table, RDB::Table).getPrimaryKeyColumns()
+}
+
+query UML::Class::class2foreignKeys() : OrderedSet(RDB::constraints::ForeignKey) 
+{
+	return self.attributes->collect(a | a.resolveIn(UML::Property::relationshipAttribute2foreignKey, RDB::constraints::ForeignKey))->asOrderedSet()
+} 
+
+query UML::Class::class2columns(targetClass: UML::Class) : OrderedSet(RDB::TableColumn) 
+{
+	return self.dataType2columns(targetClass)->
+		union(self.generalizations2columns(targetClass))->asOrderedSet()
+}
+
+query UML::DataType::dataType2columns(in targetType : UML::DataType) : OrderedSet(RDB::TableColumn) 
+{
+	return self.primitiveAttributes2columns(targetType)->
+		union(self.enumerationAttributes2columns(targetType))->
+		union(self.relationshipAttributes2columns(targetType))->
+		union(self.assosiationAttributes2columns(targetType))->reject(c|c.oclIsUndefined())->asOrderedSet()
+}
+
+query UML::DataType::dataType2primaryKeyColumns(in prefix : String, in leaveIsPrimaryKey : Boolean) : OrderedSet(RDB::TableColumn) 
+{           
+	return self.dataType2columns(self)->select(isPrimaryKey)->
+		collect (c | object RDB::TableColumn 
+		{
+		   name := prefix + '_' + c.name;
+		   domain := c.domain;
+		   type := object RDB::datatypes::PrimitiveDataType 
+		   {
+			  name := c.type.name;
+		   };
+		   isPrimaryKey := leaveIsPrimaryKey
+		}
+		)->asOrderedSet()
+}
+
+query UML::DataType::primitiveAttributes2columns(in targetType: UML::DataType) : OrderedSet(RDB::TableColumn) 
+{
+	return self.attributes->collect(a | a.primitiveAttribute2column(targetType))->asOrderedSet()
+}
+
+query umlPrimitive2rdbPrimitive(in name : String) : String 
+{
+	return if name = 'String' then 'varchar' else
+		if name = 'Boolean' then 'int' else
+			if name = 'Integer' then 'int' else
+				name
+			endif
+		endif
+	endif
+}
+
+mapping UML::Property::primitiveAttribute2column(in targetType: UML::DataType) : RDB::TableColumn 
+	when { self.isPrimitive() }
+{
+	isPrimaryKey := self.isPrimaryKey();
+	name := self.name;
+	type := object RDB::datatypes::PrimitiveDataType { name := umlPrimitive2rdbPrimitive(self.type.name); };
+}
+
+query UML::DataType::enumerationAttributes2columns(in targetType: UML::DataType) : OrderedSet(RDB::TableColumn) 
+{
+	return self.attributes->collect(map enumerationAttribute2column(targetType))->asOrderedSet()
+}
+
+mapping UML::Property::enumerationAttribute2column(in targetType: UML::DataType) : RDB::TableColumn 
+	when { self.isEnumeration() }
+{
+	isPrimaryKey := self.isPrimaryKey();	
+	name := self.name;
+	type := object RDB::datatypes::PrimitiveDataType { name := 'int'; };
+}
+
+query UML::DataType::relationshipAttributes2columns(in targetType: UML::DataType) : OrderedSet(RDB::TableColumn) 
+{
+	return self.attributes->collect(map relationshipAttribute2foreignKey(targetType))->reject(a | a.oclIsUndefined())->
+		collect(includedColumns)->asOrderedSet();
+}
+
+mapping UML::Property::relationshipAttribute2foreignKey(in targetType: UML::DataType) : RDB::constraints::ForeignKey 
+	when { self.isRelationship() }
+{
+	name := 'FK' + self.name;
+	includedColumns := self.type.asDataType().dataType2primaryKeyColumns(self.name, self.isIdentifying());
+	referredUC := self.type.late resolveoneIn(UML::Class::class2primaryKey, RDB::constraints::PrimaryKey);
+}
+
+query UML::DataType::assosiationAttributes2columns(targetType : UML::DataType) : OrderedSet(RDB::TableColumn) 
+{
+	return self.attributes->select(isAssosiation())->
+		collect(type.asDataType().dataType2columns(targetType))->asOrderedSet()
+}
+
+query UML::Class::generalizations2columns(targetClass : UML::Class) : OrderedSet(RDB::TableColumn) 
+{
+	return self.generalizations->collect(g | g.general.class2columns(targetClass))->reject(c|c.oclIsUndefined())->asOrderedSet()
+}
+
+
+query UML::Package::getSubpackages() : OrderedSet(UML::Package) 
+{
+	return self.ownedElements->select(oclIsTypeOf(UML::Package))->collect(oclAsType(UML::Package))->asOrderedSet()
+}
+
+query UML::Type::asDataType() : UML::DataType 
+{
+	return self.oclAsType(UML::DataType)
+}
+
+query UML::Property::isPrimaryKey() : Boolean 
+{
+	return self.stereotype->includes('primaryKey')
+}
+
+query UML::Property::isIdentifying() : Boolean 
+{
+	return self.stereotype->includes('identifying')
+}
+
+query UML::Property::isPrimitive() : Boolean 
+{
+	return self.type.oclIsKindOf(UML::PrimitiveType)
+}
+
+query UML::Property::isEnumeration() : Boolean 
+{
+	return self.type.oclIsKindOf(UML::Enumeration)
+}
+
+query UML::Property::isRelationship() : Boolean 
+{
+	return self.type.oclIsKindOf(UML::DataType) and self.type.isPersistent()
+}
+
+query UML::Property::isAssosiation() : Boolean 
+{
+	return self.type.oclIsKindOf(UML::DataType) and not self.type.isPersistent()
+}
+
+query RDB::Table::getPrimaryKeyColumns() : OrderedSet(RDB::TableColumn) 
+{
+	return self.columns->select(isPrimaryKey)
+}
+
+query UML::ModelElement::isPersistent() : Boolean 
+{
+	return self.stereotype->includes('persistent')
+}
+
+query UML::Package::hasPersistentClasses() : Boolean 
+{
+	return self.ownedElements->exists
+	(
+		let c : UML::Class = oclAsType(UML::Class) in 
+			c.oclIsUndefined() implies c.isPersistent()
+	)
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="ConceptualScenarioMetaModel.presentation.ConceptualScenarioMetaModelModelWizardID"
+            name="%_UI_ConceptualScenarioMetaModelModelWizard_label"
+            class="ConceptualScenarioMetaModel.presentation.ConceptualScenarioMetaModelModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/ConceptualScenarioMetaModelModelFile.gif">
+         <description>%_UI_ConceptualScenarioMetaModelModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="ConceptualScenarioMetaModel.presentation.ConceptualScenarioMetaModelEditorID"
+            name="%_UI_ConceptualScenarioMetaModelEditor_label"
+            icon="icons/full/obj16/ConceptualScenarioMetaModelModelFile.gif"
+            extensions="conceptualscenariometamodel"
+            class="ConceptualScenarioMetaModel.presentation.ConceptualScenarioMetaModelEditor"
+            contributorClass="ConceptualScenarioMetaModel.presentation.ConceptualScenarioMetaModelActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

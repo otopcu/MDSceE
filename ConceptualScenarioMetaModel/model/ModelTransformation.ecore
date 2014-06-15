@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="HLA Target Transformation Model">
+  <eClassifiers xsi:type="ecore:EClass" name="Entity Type Mapping" eSuperTypes="ConceptualScenario.ecore#//Entity%20Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="HLAClass" lowerBound="1"
+        upperBound="-1" eType="#//HLA%20Class%20Reference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity Char Mapping" eSuperTypes="ConceptualScenario.ecore#//Entity%20Characteristic">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="HLAAttributes" lowerBound="1"
+        upperBound="-1" eType="#//HLA%20Class%20Property%20Reference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HLA Object Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" lowerBound="1"
+        upperBound="-1" eType="#//HLA%20Attribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HLA Class Reference" eSuperTypes="#//HLA%20Object%20Class #//HLA%20Interaction%20Class"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HLA Attribute"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HLA Class Property Reference" eSuperTypes="#//HLA%20Attribute #//HLA%20Parameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HLA Interaction Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" eType="#//HLA%20Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HLA Parameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Event Type Mapping">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hlaClasses" lowerBound="1"
+        upperBound="-1" eType="#//HLA%20Class%20Reference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggerMappings" lowerBound="1"
+        upperBound="-1" eType="#//Trigger%20Condition%20Mapping" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contentCharMappings" lowerBound="1"
+        upperBound="-1" eType="#//Content%20Char%20Mapping" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetCharMappings" lowerBound="1"
+        upperBound="-1" eType="#//Target%20Char%20Mapping" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceCharMappings" lowerBound="1"
+        upperBound="-1" eType="#//Source%20Char%20Mapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Source Char Mapping" eSuperTypes="ConceptualScenario.ecore#//Source%20Characteristic">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hlaClassProperties" lowerBound="1"
+        upperBound="-1" eType="#//HLA%20Class%20Property%20Reference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Target Char Mapping" eSuperTypes="ConceptualScenario.ecore#//Target%20Characteristic">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hlaProperties" lowerBound="1"
+        upperBound="-1" eType="#//HLA%20Class%20Property%20Reference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Content Char Mapping" eSuperTypes="ConceptualScenario.ecore#//Content%20Characteristic">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hlaClassProperties" lowerBound="1"
+        upperBound="-1" eType="#//HLA%20Class%20Property%20Reference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trigger Condition Mapping" eSuperTypes="ConceptualScenario.ecore#//Trigger%20Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name"/>
+  </eClassifiers>
+</ecore:EPackage>

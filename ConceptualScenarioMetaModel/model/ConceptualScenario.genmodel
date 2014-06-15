@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/ConceptualScenarioMetaModel/src" modelPluginID="ConceptualScenarioMetaModel"
+    modelName="ConceptualScenario" importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0"
+    copyrightFields="false">
+  <foreignModel>ConceptualScenario.ecore</foreignModel>
+  <genPackages prefix="ConceptualScenarioMetaModel" disposableProviderFactory="true"
+      fileExtensions="conceptualscenario" ecorePackage="ConceptualScenario.ecore#/">
+    <genClasses ecoreClass="ConceptualScenario.ecore#//ConceptualEntity">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ConceptualEntity/Name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//ConceptualEntity/characteristics"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//EntityCharacteristic">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//EntityCharacteristic/Name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//EntityCharacteristic/Type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//EntityCharacteristic/Value"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//StateMachine">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//StateMachine/states"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//StateMachine/Name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//StateMachine/conEnt"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//State">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//State/Name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//State/guard"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//ExitCondition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//ExitCondition/nextState"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//ExitCondition/exitAction"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//PatternAction">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//PatternAction/Name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//PatternAction/Sequence"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//PatternAction/senders"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//PatternAction/receivers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//PatternAction/events"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//PatternAction/variations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//PatternAction/exceptions"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//PatternOfInterplay">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//PatternOfInterplay/actions"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//PatternOfInterplay/Name"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//Event">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//Event/Name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//Event/souceCharacteristic"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//Event/targetCharacteristic"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//Event/contentCharacteristic"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//Event/trigger"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//TriggerCondition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//TriggerCondition/Condition"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//Variation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//Variation/Name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//Variation/Condition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//Variation/receivers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//Variation/senders"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//Exception">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//Exception/Name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//Exception/Condition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//Exception/receivers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//Exception/senders"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//ConceptualScenario">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//ConceptualScenario/entities"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//ConceptualScenario/interplays"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//ConceptualScenario/stateMachines"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//ConceptualScenario/events"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ConceptualScenario.ecore#//ConceptualScenario/indentification"/>
+    </genClasses>
+    <genClasses ecoreClass="ConceptualScenario.ecore#//ScenarioIdentification">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/POCEmail"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/POCTelephone"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/POCOrganisation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/POCName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/UseHistory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/POCType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/UseLimitations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/Name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/Version"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/ModificationDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/Purpose"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ConceptualScenario.ecore#//ScenarioIdentification/Description"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
